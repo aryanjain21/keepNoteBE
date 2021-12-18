@@ -61,7 +61,7 @@ module.exports = {
                 data: user
             })
         } catch (error) {
-            return res.status(400).json({
+            return res.status(401).json({
                 message: (error && error.message) || 'Oops!! failed to login'
             })
         }

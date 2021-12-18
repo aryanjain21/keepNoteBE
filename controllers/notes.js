@@ -21,6 +21,46 @@ module.exports = {
         }
     },
 
+    getAllNote: async(req, res) => {
+        try {
+            let search = {}
+            if(req.body.search) {
+                search = {
+                    $or: [
+                        {
+                            title: new RegExp(req.body.search, 'i')
+                        },
+                        {
+                            color: new RegExp(req.body.search, 'i')
+                        }
+                    ]
+                }
+            }
+            if(req.body.section) {
+                search.isActive = req.body.section.isActive
+                search.isArchived = req.body.section.isArchived
+                search.isPinned = req.body.section.isPinned
+            }
+            let obj = {userId: req.user._id, ...search};
+            let userNote = await Note.find(obj);
+            let totalCount = await Note.find({userId: req.user._id}).count();
+            if(!userNote) {
+                throw {message: 'Note does not exist'};
+            }
+            return res.json({
+                status: 200,
+                message: 'Note/Notes found successfully',
+                sectionNotes: userNote.length,
+                totalNotes: totalCount,
+                data: userNote
+            });
+        } catch (error) {
+            return res.status(401).json({
+                message: (error && error.message) || 'Oops!! Failed to find note...'
+            });
+        }
+    },
+
     updateNote: async (req, res) => {
         try {
             if(!req.body.noteId) {
