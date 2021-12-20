@@ -39,7 +39,7 @@ module.exports = {
             if(req.body.section) {
                 search.isActive = req.body.section.isActive
                 search.isArchived = req.body.section.isArchived
-                search.isPinned = req.body.section.isPinned
+                // search.isPinned = req.body.section.isPinned
             }
             let obj = {userId: req.user._id, ...search};
             let userNote = await Note.find(obj);
