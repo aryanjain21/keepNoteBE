@@ -42,7 +42,7 @@ module.exports = {
                 // search.isPinned = req.body.section.isPinned
             }
             let obj = {userId: req.user._id, ...search};
-            let userNote = await Note.find(obj);
+            let userNote = await Note.find(obj).sort({CreatedAt: -1});
             let totalCount = await Note.find({userId: req.user._id}).count();
             if(!userNote) {
                 throw {message: 'Note does not exist'};
